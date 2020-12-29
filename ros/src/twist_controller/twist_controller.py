@@ -39,21 +39,21 @@ class Controller(object):
             return 0.0, 0.0, 0.0
         
         # Calculate steering using low pass filtered current_vel
-        current_vel = self.vel_lpf.filt(current_vel)
+#         current_vel = self.vel_lpf.filt(current_vel)
         vel_error = linear_vel - current_vel
         steering = self.yaw_controller.get_steering(linear_vel, angular_vel, current_vel)
 
         # Calculate throttle
         throttle = self.throttle_controller.step(vel_error, sample_time)
-        
+
         # Calculate brake
         brake = 0
         
-        if linear_vel == 0. and current_vel < 0.1:  # Want to stop moving
+        if linear_vel == 0.0 and current_vel < 0.1:  # Want to stop moving
             throttle = 0
             brake = 700  # N*m
         elif throttle < 0.1 and vel_error < 0:  # Moving faster than want to be
-            throttle = 0
+            throttle = 0.0
             decel = max(vel_error, self.decel_limit)  # Decel is a function of vel error
             brake = abs(decel)*self.vehicle_mass*self.wheel_radius
         

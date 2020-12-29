@@ -61,12 +61,12 @@ class DBWNode(object):
         self.throttle = 0
         self.brake = 0
         self.steering = 0
-        self.dbw_enabled = True
+        self.dbw_enabled = False
         
         # Create Controller object
         self.controller = Controller(vehicle_mass, brake_deadband, decel_limit, accel_limit, wheel_radius, wheel_base, steer_ratio, min_speed, max_lat_accel, max_steer_angle)
-        # : Subscribe to all the topics you need to
-        self.dbw_enabled_sub = rospy.Subscriber("/dbw_enabled", Bool, self.dbw_enabled_cb)
+        # Subscribe to all the topics you need to
+        self.dbw_enabled_sub = rospy.Subscriber("/vehicle/dbw_enabled", Bool, self.dbw_enabled_cb)
         self.current_velocity_sub = rospy.Subscriber("/current_velocity", TwistStamped, self.current_velocity_cb)
         self.twist_cmd_sub = rospy.Subscriber("/twist_cmd", TwistStamped, self.twist_cmd_cb)
         # Loop
