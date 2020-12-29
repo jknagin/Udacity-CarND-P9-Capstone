@@ -8,6 +8,8 @@ import math
 import numpy as np
 from std_msgs.msg import Int32
 
+MAX_DECEL = 1.0
+
 '''
 This node will publish waypoints from the car's current position to some `x` distance ahead.
 
@@ -90,12 +92,12 @@ class WaypointUpdater(object):
             lane.waypoints = self.decelerate_waypoints(base_waypoints, closest_idx)
         self.final_waypoints_pub.publish(lane)
         
-    def decelerate_waypoints(self, waypoints, closest_idx):
+    def decelerate_waypoints(self, waypoints, closest_index):
         temp = []
         for i, waypoint in enumerate(waypoints):
             p = Waypoint()
             p.pose = waypoint.pose
-            stop_idx = max(self.stopline_waypoint_index - closest_index - 2, 0)
+            stop_idx = max(self.stopline_waypoint_index - closest_index - 3, 0)
             dist = self.distance(waypoints, i, stop_idx)
             # Decrease velocity as distance to stop decreases
             vel = math.sqrt(2*MAX_DECEL*dist)
